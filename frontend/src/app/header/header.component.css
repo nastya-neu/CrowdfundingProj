@@ -1,0 +1,43 @@
+@import url(https://fonts.googleapis.com/css?family=Homemade+Apple);
+
+header {
+    width: 100%;
+    height: 50px;
+}
+
+.header-auth {
+    position: absolute;
+    right: 5%;
+    top: 0px;
+}
+
+.auth-buttons {
+    margin-top: 7px;
+}
+
+.header-logo {
+    display: flex;
+}
+
+.llc-logo {
+    height: 50px;
+    margin-left: 20px;
+}
+
+.llc-name {
+    font-family: 'Homemade Apple', cursive;
+    color:#fff;
+    padding-left: 10px;
+    padding-top: 10px;
+}
+
+button + button {
+    margin-left: 20px;
+}
+
+.header-background {
+    width: 100%;
+    height: 100%;
+    background-color:#272727c9;
+    border-radius: 4px;
+}

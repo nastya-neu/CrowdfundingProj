@@ -6,6 +6,10 @@ class DatabaseCtrl {
         this._config = config;
         this._pool = new Pool(this._config);
     }
+
+    getPool(){
+        return this._pool;
+    }
     
     query(query) {
         return new Promise((resolve, reject)=>{
@@ -20,12 +24,6 @@ class DatabaseCtrl {
                 })
               })
         });
-    }
-
-    async test() {
-        const result = await this.query("SELECT 1+1 AS RESULT");
-        console.log("RESULT: ", result);
-        return result;
     }
 }
 

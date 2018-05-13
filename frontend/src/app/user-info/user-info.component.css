@@ -1,0 +1,15 @@
+.user-info {
+    display: flex;
+    margin-top: 3px;
+}
+
+.user-avatar {
+    height: 45px;
+    border-radius: 50%;
+}
+
+.user-name {
+    margin-top: 14px;
+    margin-left: 10px;
+    color: #fff;
+}

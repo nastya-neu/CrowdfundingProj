@@ -5,69 +5,71 @@ const client = new Client(config);
 module.exports = async () => {
 
   await client.connect();
-
+    
   await client.query(
-  `CREATE TABLE IF NOT EXISTS users (
-    id SERIAL PRIMARY KEY,
+  `CREATE TABLE IF NOT EXISTS ${config.tables.users} (
+    id varchar PRIMARY KEY,
     username varchar(50) UNIQUE NOT NULL,
     first_name varchar,
     last_name varchar,
     birthday date,
-    email varchar,
-    avatarUrl varchar,
+    email varchar UNIQUE NOT NULL,
+    avatar_url varchar,
     created_at timestamp,
     updated_at timestamp,
     deleted_at timestamp
   )`);
 
-  console.log("CRATED TABLE USERS");
-
-  await client.query(`CREATE TABLE IF NOT EXISTS ideas (
-    id SERIAL PRIMARY KEY,
-    idea_name varchar NOT NULL,
-    idea_describe varchar NOT NULL,
-    user_id int REFERENCES users (id),
+  await client.query(`CREATE TABLE IF NOT EXISTS ${config.tables.articles} (
+    id varchar PRIMARY KEY,
+    name varchar NOT NULL,
+    describe varchar NOT NULL,
+    user_id int REFERENCES ${config.tables.users} (id),
     created_at timestamp,
     updated_at timestamp,
     deleted_at timestamp
   )`);
 
-  console.log("CRATED TABLE IDEAS");
-
-  await client.query(`CREATE TABLE IF NOT EXISTS user_credentials (
-    id SERIAL PRIMARY KEY,
-    user_id int REFERENCES users (id),
+  await client.query(`CREATE TABLE IF NOT EXISTS ${config.tables.credentials} (
+    id varchar PRIMARY KEY,
+    user_id int REFERENCES ${config.tables.users} (id),
     hashed_password varchar NOT NULL,
+    salt varchar NOT NULL,
     created_at timestamp,
     updated_at timestamp,
     deleted_at timestamp
   )`);
 
-  console.log("CRATED TABLE USER_CREDENTIALS");
-
-  await client.query(`CREATE TABLE IF NOT EXISTS user_likes (
-    id SERIAL PRIMARY KEY,
-    user_id int REFERENCES users (id),
-    ideas_id int REFERENCES ideas (id),
-    amout_payment bigint NOT NULL CHECK (amout_payment > 0),
+  await client.query(`CREATE TABLE IF NOT EXISTS ${config.tables.payment} (
+    id varchar PRIMARY KEY,
+    user_id int REFERENCES ${config.tables.users} (id),
+    article_id int REFERENCES ${config.tables.articles} (id),
+    amout bigint NOT NULL CHECK (amout_payment > 0),
     created_at timestamp,
     updated_at timestamp,
     deleted_at timestamp
   )`);
 
-  console.log("CRATED TABLE USER_LIKES");
-
-  await client.query(`CREATE TABLE IF NOT EXISTS user_payment (
-    id SERIAL PRIMARY KEY,
-    user_id int REFERENCES users (id),
-    ideas_id int REFERENCES ideas (id),
+  await client.query(`CREATE TABLE IF NOT EXISTS ${config.tables.likes} (
+    id varchar PRIMARY KEY,
+    user_id int REFERENCES ${config.tables.users} (id),
+    article_id int REFERENCES ${config.tables.articles} (id),
     is_likes boolean,
     created_at timestamp,
     updated_at timestamp,
     deleted_at timestamp
   )`);
 
-  console.log("CRATED TABLE USER_PAYMENT");
+  await client.query(`CREATE TABLE IF NOT EXISTS ${config.tables.clients} (
+    id varchar PRIMARY KEY,
+    name varchar NOT NULL,
+    secret varchar NOT NULL,
+    created_at timestamp,
+    updated_at timestamp,
+    deleted_at timestamp
+  )`);
+
+  console.log("MIRATIONS CREATED!");
 
   await client.end();
 };

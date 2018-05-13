@@ -1,7 +1,5 @@
 const cluster = require('cluster');
 const express = require('express');
-const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
 const config = require('./config/configApp');
 
 const app = express();
@@ -9,6 +7,23 @@ const router = require('./routes')(app, express);
 
 const migrations = require('./migrations');
 
+migrations()
+.then(()=>{
+    startApp()
+})
+.catch((error)=>{
+    console.log("Unable to bootstrap worker:", error);
+    process.exit(1);
+})
+
+const startApp = ()=>{
+    if (cluster.isMaster) {
+        console.log(`Starting cluster with ${config.numThreads} workers`);
+        bootstrapMaster()
+    } else {
+        bootstrapWorker();
+    }
+}
 
 const bootstrapWorker = ()=>{
     app.use(router);
@@ -30,16 +45,4 @@ const bootstrapMaster = ()=>{
                 cluster.fork();
             }, 5000);    
     });
-}
-
-if (cluster.isMaster) {
-    console.log(`Starting cluster with ${config.numThreads} workers`);
-    migrations()
-    .then(bootstrapMaster)
-    .catch((error)=>{
-        console.log("Unable to bootstrap worker:", error);
-        process.exit(1);
-    });
-} else {
-    bootstrapWorker();
 }

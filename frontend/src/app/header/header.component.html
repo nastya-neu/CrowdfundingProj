@@ -1,0 +1,13 @@
+<div class="header-background">
+    <div class="header-logo">
+        <img class="llc-logo" src="/assets/images/logo.png" alt="LOGO">
+        <div class="llc-name">Crowdfunding LLC</div>
+    </div>
+    <div class="header-auth">
+      <div class="auth-buttons" *ngIf="!userInfo">
+        <button mat-raised-button (click)="getUser()">Вход</button>
+        <button mat-raised-button>Регистрация</button>
+      </div>
+      <user-info *ngIf="userInfo" [user]="userInfo"></user-info>
+  </div>
+</div>
